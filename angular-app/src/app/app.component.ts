@@ -23,7 +23,7 @@ export class AppComponent {
 
   }
   getContact(x) {
-    return this.http.get('/api');
+    return this.http.get('http://34.122.195.239:30893/');
   }
 
 
