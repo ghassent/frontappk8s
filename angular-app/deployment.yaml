@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: exampleapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: exampleapp
+  template:
+    metadata:
+      labels:
+        app: exampleapp
+    spec:
+      containers:
+      - name: frontendapp
+        image: ghassent/testdocker:frontapp5
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: exampleapp
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: exampleapp
+    spec:
+      containers:
+      - name: backendapp
+        image: ghassent/testdocker:hellopod
+        #imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: entrypt
+spec:
+  type: LoadBalancer
+  ports:
+  - name: backend
+    port: 8888
+    targetPort: 5000
+    nodePort: 31636
+  - name: frontend
+    port: 8887
+    targetPort: 3000
+    nodePort: 30964
+  selector:
+    app: exampleapp
